@@ -1,0 +1,10 @@
+setup.py
+shared_memory_image.egg-info/PKG-INFO
+shared_memory_image.egg-info/SOURCES.txt
+shared_memory_image.egg-info/dependency_links.txt
+shared_memory_image.egg-info/not-zip-safe
+shared_memory_image.egg-info/requires.txt
+shared_memory_image.egg-info/top_level.txt
+src/SharedImageReader.cpp
+src/SharedImageWriter.cpp
+src/python_bindings.cpp
