@@ -26,16 +26,17 @@ int main() {
             std::cout << "Reader: New image read from shared memory (version " << last_frame << ")" << std::endl;
 
             // Display the image
-            cv::imshow("Shared Memory Image", image);
-            if (cv::waitKey(100) == 27) {  // Press ESC to exit
-                break;
-            }
-        } else {
-            std::cout << "Reader: No new image available in shared memory" << std::endl;
-        }
+            // cv::imshow("Shared Memory Image", image);
+            // if (cv::waitKey(100) == 27) {  // Press ESC to exit
+            //     break;
+            // }
+        } 
+        // else {
+        //     std::cout << "Reader: No new image available in shared memory" << std::endl;
+        // }
 
         // Check for updates every 100 ms
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     return 0;
