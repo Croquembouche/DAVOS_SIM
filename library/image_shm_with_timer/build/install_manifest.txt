@@ -1,0 +1,2 @@
+/usr/local/lib/libshared_memory_image.so
+/usr/local/include/SharedImage.h

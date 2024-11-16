@@ -1,62 +1,66 @@
 #include "SharedImage.h"
-#include <fcntl.h>
+#include <cerrno>
+#include <cstring>
 #include <sys/mman.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
 
 SharedImageReader::SharedImageReader(const std::string &name)
     : shm_name_(name), shm_fd_(-1), shm_ptr_(nullptr) {
-    // Open the shared memory segment
-    shm_fd_ = shm_open(shm_name_.c_str(), O_RDONLY, 0666);
+    shm_fd_ = shm_open(shm_name_.c_str(), O_RDWR, 0666);
     if (shm_fd_ == -1) {
-        std::cerr << "Failed to open shared memory for reading" << std::endl;
+        std::cerr << "Failed to open shared memory for reading. Error: " << strerror(errno) << std::endl;
         return;
     }
 
-    // Map the shared memory segment into the process's address space
-    shm_ptr_ = static_cast<SharedImage *>(mmap(0, sizeof(SharedImage), PROT_READ, MAP_SHARED, shm_fd_, 0));
-
+    shm_ptr_ = static_cast<SharedImage *>(mmap(0, sizeof(SharedImage), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd_, 0));
     if (shm_ptr_ == MAP_FAILED) {
-        std::cerr << "Failed to map shared memory for reading" << std::endl;
+        std::cerr << "Failed to map shared memory for reading. Error: " << strerror(errno) << std::endl;
+        close(shm_fd_);
+        shm_fd_ = -1;
+        return;
     }
 }
 
 SharedImageReader::~SharedImageReader() {
     if (shm_ptr_ != MAP_FAILED) {
-        munmap(shm_ptr_, sizeof(SharedImage)); // Unmap the shared memory
+        munmap(shm_ptr_, sizeof(SharedImage));
     }
     if (shm_fd_ != -1) {
-        close(shm_fd_);                        // Close the shared memory file descriptor
+        close(shm_fd_);
     }
 }
 
-bool SharedImageReader::readImage(cv::Mat &image, int &last_version) {
-    // Increment the reader count atomically before reading
-    shm_ptr_->reader_count.fetch_add(1);
-
-    // Check if a new version of the image is available
-    if (shm_ptr_->version == last_version) {
-        // Decrement reader count and notify the writer if no more readers are active
-        if (shm_ptr_->reader_count.fetch_sub(1) == 1) {
-            shm_ptr_->cv.notify_all();
-        }
-        return false; // No new data available
+bool SharedImageReader::readImage(cv::Mat &image, int &last_frame) {
+    if (!isInitialized()) {
+        std::cerr << "Shared memory not initialized." << std::endl;
+        return false;
     }
 
-    // Update the last_version to the current version
-    last_version = shm_ptr_->version;
-
-    // Copy shared memory data into an OpenCV Mat and clone to ensure thread safety
-    image = cv::Mat(480, 640, CV_8UC3, shm_ptr_->data).clone();
-
-    std::cout << "New image read with version " << last_version << std::endl;
-
-    // Decrement reader count and notify the writer if no more readers are active
-    if (shm_ptr_->reader_count.fetch_sub(1) == 1) {
-        shm_ptr_->cv.notify_all(); // Notify writer that it can write
+    // if no new image, do not fetch image
+    if (shm_ptr_->frame == last_frame){
+        return false;
     }
+
+    pthread_mutex_lock(&shm_ptr_->mutex);
+
+    while (!shm_ptr_->ready_to_read) {
+        shm_ptr_->waiting_readers++;
+        pthread_cond_wait(&shm_ptr_->read_cv, &shm_ptr_->mutex);
+        shm_ptr_->waiting_readers--;
+    }
+
+    if (shm_ptr_->frame > last_frame) {
+        image = cv::Mat(480, 640, CV_8UC3, shm_ptr_->data).clone();
+        last_frame = shm_ptr_->frame;
+    }
+
+    pthread_mutex_unlock(&shm_ptr_->mutex);
 
     return true;
 }
 
-
+bool SharedImageReader::isInitialized() const {
+    return shm_ptr_ != nullptr;
+}
