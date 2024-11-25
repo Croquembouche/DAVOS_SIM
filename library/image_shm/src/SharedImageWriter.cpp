@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
+#include <time.h>
 
 SharedImageWriter::SharedImageWriter(const std::string &name)
     : shm_name_(name), shm_fd_(-1), shm_ptr_(nullptr) {
@@ -60,8 +61,36 @@ SharedImageWriter::~SharedImageWriter() {
 }
 
 
-bool SharedImageWriter::writeImage(const cv::Mat &image) {
+bool SharedImageWriter::writeImageCPU(const cv::Mat &image) {
     if (image.empty() || image.total() * image.elemSize() != 921600) {
+        std::cerr << "Image size mismatch." << std::endl;
+        return false;
+    }
+
+    pthread_mutex_lock(&shm_ptr_->mutex);
+
+    shm_ptr_->ready_to_read = false;
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    memcpy(shm_ptr_->data, image.data, 921600);
+    shm_ptr_->timeStamp = ts.tv_sec * 1e9 + ts.tv_nsec;
+    // std::cout << "Time in nanoseconds: " << shm_ptr_->timeStamp << std::endl;
+    // std::cout << shm_ptr_->timeStamp << std::endl;
+    // std::cout << shm_ptr_->frame << ":" << shm_ptr_->timeStamp << std::endl;
+    shm_ptr_->frame += 1;
+
+
+    shm_ptr_->ready_to_read = true;
+    pthread_cond_broadcast(&shm_ptr_->read_cv);
+
+    pthread_mutex_unlock(&shm_ptr_->mutex);
+
+    return true;
+}
+
+bool SharedImageWriter::writeImageGPU(const cv::cuda::GpuMat &image) {
+    if (image.empty() || image.rows * image.cols * image.elemSize() != 921600) {
         std::cerr << "Image size mismatch." << std::endl;
         return false;
     }
