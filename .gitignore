@@ -6,3 +6,4 @@ ros2_comp_ws/install
 davos_ws/build
 davos_ws/log
 davos_ws/install
+ros2_comp_ws/src/fixed_size_ros2_demo
