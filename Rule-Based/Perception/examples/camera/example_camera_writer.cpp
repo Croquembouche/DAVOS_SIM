@@ -75,20 +75,20 @@ int main() {
         // resizedFrame.download(resizedCpuFrame);
 
         // Calculate FPS
-        frameCount++;
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = end - start;
-        int fps = 0;
-        if (elapsed.count() >= 1.0) {
-            fps = frameCount / elapsed.count();
-            std::cout << "FPS:" << fps << std::endl;
-            frameCount = 0;
-            start = std::chrono::high_resolution_clock::now();
-        }
+        // frameCount++;
+        // auto end = std::chrono::high_resolution_clock::now();
+        // std::chrono::duration<double> elapsed = end - start;
+        // int fps = 0;
+        // if (elapsed.count() >= 1.0) {
+        //     fps = frameCount / elapsed.count();
+        //     std::cout << "FPS:" << fps << std::endl;
+        //     frameCount = 0;
+        //     start = std::chrono::high_resolution_clock::now();
+        // }
         // Write the image to shared memory
         if (global_writer->writeImageCPU(frame)) {
             // std::cout << "Writer: Image written to shared memory (version " << iteration + 1 << ")" << std::endl;
-            iteration += 1;
+            // iteration += 1;
         } else {
             std::cerr << "Writer: Failed to write image to shared memory" << std::endl;
         }

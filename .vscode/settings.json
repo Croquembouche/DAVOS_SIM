@@ -70,6 +70,7 @@
         "semaphore": "cpp",
         "csignal": "cpp",
         "codecvt": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "*.ipp": "cpp"
     }
 }

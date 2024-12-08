@@ -8,8 +8,8 @@ public:
     : Node("image_publisher"), frame_count_(0) // Initialize frame count to 0
 
     {
-        publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_topic", 1);
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(10), std::bind(&ImagePublisher::publish_image, this));
+        publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_topic", 10);
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&ImagePublisher::publish_image, this));
     }
 
     int frame_id = 1;

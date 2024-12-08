@@ -9,7 +9,7 @@ public:
         : Node("image_subscriber")
     {
         subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-            "image_topic", 1,
+            "image_topic", 10,
             std::bind(&ImageSubscriber::image_callback, this, std::placeholders::_1));
     }
 
@@ -22,10 +22,10 @@ private:
         auto latency_ns = (receive_time - publish_time).nanoseconds();
         auto frame_count_ = msg->header.frame_id;
 
-        // RCLCPP_INFO(this->get_logger(), "%s at: %ld", frame_count_.c_str(), latency_ns);
-        if (std::stoi(frame_count_)-previous != 1){
-            RCLCPP_INFO(this->get_logger(), "Lost frame: %s", frame_count_.c_str());
-        }
+        RCLCPP_INFO(this->get_logger(), "%s at: %ld", frame_count_.c_str(), latency_ns);
+        //if (std::stoi(frame_count_)-previous != 1){
+          //  RCLCPP_INFO(this->get_logger(), "Lost frame: %s", frame_count_.c_str());
+        //}
 
         previous = std::stoi(frame_count_);
 
