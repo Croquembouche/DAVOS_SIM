@@ -7,17 +7,20 @@ LIBS := -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_videoio \
         -lopencv_cudaimgproc -lopencv_imgproc -lopencv_cudawarping -pthread
 
 # Additional libraries
-LIBS += -lshared_memory_image
+LIBS += -ldavos_shm
 
 # Source files and targets
-SRCS := example_camera_writer.cpp
-TARGETS := example_camera_writer
+SRCS := example_camera_writer.cpp example_camera_reader.cpp
+TARGETS := example_camera_writer example_camera_reader
 
 # Build all targets
 all: $(TARGETS)
 
 # Build each target
 example_camera_writer: example_camera_writer.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $< $(LIBS)
+	
+example_camera_reader: example_camera_reader.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LIBS)
 
 # Clean target

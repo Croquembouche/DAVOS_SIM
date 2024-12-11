@@ -9,6 +9,10 @@
 
 // Global pointer to the writer for cleanup in the signal handler
 SharedImageWriter* global_writer = nullptr;
+int width = 640;
+int height = 480;
+int channels = 3;
+char data_type[] = "CV_8U";
 
 // Signal handler for Ctrl+C
 void handleSigInt(int signal) {
@@ -32,8 +36,8 @@ int main() {
     }
 
     // Set camera resolution
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, width);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, height);
 
     // Check if GPU is available
     if (cv::cuda::getCudaEnabledDeviceCount() == 0) {
@@ -50,8 +54,8 @@ int main() {
     int frameCount = 0;
 
     // Instantiate the shared memory writer
-    char frontCamera[] = "/front_camera";
-    global_writer = new SharedImageWriter(frontCamera);
+    char frontCamera[] = "front_camera";
+    global_writer = new SharedImageWriter(frontCamera, height, width, channels, data_type);
 
     // Register the signal handler
     std::signal(SIGINT, handleSigInt);
@@ -85,10 +89,14 @@ int main() {
         //     frameCount = 0;
         //     start = std::chrono::high_resolution_clock::now();
         // }
+        // cv::imshow("Shared Memory Write Image", frame);
+        //     if (cv::waitKey(100) == 27) {  // Press ESC to exit
+        //         break;
+        //     }
         // Write the image to shared memory
-        if (global_writer->writeImageCPU(frame)) {
+        if (global_writer->writeImage(frame)) {
             // std::cout << "Writer: Image written to shared memory (version " << iteration + 1 << ")" << std::endl;
-            // iteration += 1;
+            iteration += 1;
         } else {
             std::cerr << "Writer: Failed to write image to shared memory" << std::endl;
         }
