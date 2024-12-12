@@ -9,7 +9,8 @@ int main(){
 
   // Initialize Lidar Object
   unitree_lidar_sdk::UnitreeLidarReader* lreader = unitree_lidar_sdk::createUnitreeLidarReader();
-  int cloud_scan_num = 18;
+  int cloud_scan_num = 36;
+  int point_byte = 24;
   std::string port_name = "/dev/ttyUSB0";
 
   if ( lreader->initialize(cloud_scan_num, port_name) ){
@@ -73,7 +74,7 @@ int main(){
 
 // Instantiate the shared memory writer
   char center_lidar[] = "center_lidar";
-  global_writer = new SharedUnitreeLidarWriter(center_lidar, cloud_scan_num);
+  global_writer = new SharedUnitreeLidarWriter(center_lidar, cloud_scan_num, point_byte);
 
   printf("Data type size: \n");
   printf("\tsizeof(PointUnitree) = %ld\n", sizeof(unitree_lidar_sdk::PointUnitree));
@@ -141,7 +142,7 @@ int main(){
       break;
     }
 
-    usleep(500);
+    usleep(1000);
   }
   
   return 0;

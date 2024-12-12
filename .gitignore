@@ -1,7 +1,7 @@
 library/image_shm/build
 library/image_shm_with_timer/build
 library/DAVOS_SHM/build
-library/unitree_lidar_sdk
+library/unitree_lidar_sdk/build
 ros2_comp_ws/build
 ros2_comp_ws/log
 ros2_comp_ws/install

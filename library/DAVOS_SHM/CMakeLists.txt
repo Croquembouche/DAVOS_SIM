@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(include)
 
 # Add the source files to the library
-add_library(davos_shm SHARED src/SharedImageWriter.cpp src/SharedImageReader.cpp src/SharedUnitreeLidarWriter.cpp)
+add_library(davos_shm SHARED src/SharedImageWriter.cpp src/SharedImageReader.cpp src/SharedUnitreeLidarWriter.cpp src/SharedUnitreeLidarReader.cpp)
 
 # Find OpenCV package
 find_package(OpenCV REQUIRED)
