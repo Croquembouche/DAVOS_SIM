@@ -6,7 +6,7 @@
 #include <pcl/io/pcd_io.h>
 
 int point_byte = 24;
-int cloud_scan_num = 36;
+int cloud_scan_num = 18;
 
 
 /**
@@ -75,23 +75,27 @@ int main() {
             auto current = ts.tv_sec * 1e9 + ts.tv_nsec;
             auto writetime = reader.getTimeStamp();
             auto framenumber = reader.getFrameNumber();
-            std::cout << framenumber << ":" << current - writetime << std::endl;
+            if (framenumber-last_framenumber != 1){
+                std::cout << "Missed: " << framenumber << ";" << last_framenumber  << std::endl;
+            }
+            last_framenumber = framenumber;
+            std::cout << framenumber << ";" << current - writetime << std::endl;
             transformUnitreeCloudToPCL(lidar, cloud);
 
             // Specify the file path to save the PCD file
-            std::string file_path = "output_point_cloud.pcd";
+            // std::string file_path = "output_point_cloud.pcd";
 
             // Save the point cloud to disk in PCD format
-            if (pcl::io::savePCDFileASCII(file_path, *cloud) == -1) {
-                PCL_ERROR("Couldn't save the PCD file\n");
-                return (-1);
-            }
+            //if (pcl::io::savePCDFileASCII(file_path, *cloud) == -1) {
+            //    PCL_ERROR("Couldn't save the PCD file\n");
+            //    return (-1);
+            //}
             // printf("\tstamp = %f", lidar.stamp);
 
             // std::cout << "PointCloud data saved to: " << file_path << std::endl;
             // break;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     return 0;

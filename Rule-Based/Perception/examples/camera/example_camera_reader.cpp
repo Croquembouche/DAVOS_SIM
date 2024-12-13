@@ -37,7 +37,7 @@ int main() {
             auto framenumber = reader.getFrameNumber();
             // std::cout << "Reader: New image read from shared memory (version " << last_frame << ")" << std::endl;
             if (framenumber-last_framenumber != 1){
-                std::cout << "Missed: " << framenumber << std::endl;
+                std::cout << "Missed: " << framenumber << ";" << last_framenumber << std::endl;
             }
             last_framenumber = framenumber;
             std::cout << framenumber << ":" << current - writetime << std::endl;

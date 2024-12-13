@@ -9,7 +9,7 @@ int main(){
 
   // Initialize Lidar Object
   unitree_lidar_sdk::UnitreeLidarReader* lreader = unitree_lidar_sdk::createUnitreeLidarReader();
-  int cloud_scan_num = 36;
+  int cloud_scan_num = 18;
   int point_byte = 24;
   std::string port_name = "/dev/ttyUSB0";
 
@@ -55,7 +55,7 @@ int main(){
         exit(0);
       }
     }
-    usleep(500);
+    usleep(100);
   }
   printf("\n");
 //   sleep(2);
