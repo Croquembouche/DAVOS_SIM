@@ -1,7 +1,0 @@
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/shared_memory_image.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/edit_cache.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/rebuild_cache.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/list_install_components.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/install.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/install/local.dir
-/home/orin/Github/DAVOS/library/image_shm/build/CMakeFiles/install/strip.dir

@@ -1,0 +1,7 @@
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/install/strip.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/install/local.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/install.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/list_install_components.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/rebuild_cache.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/edit_cache.dir
+/media/nvidia/ssdhome/nvidia/Github/DAVOS/library/DAVOS_SHM/CMakeFiles/davos_shm.dir

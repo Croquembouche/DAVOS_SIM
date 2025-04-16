@@ -3,11 +3,11 @@ import time
 import csv
 
 # Replace with your process ID (PID)
-pid = 1591112  # Update this with the PID of the process you want to monitor
+pid = 2264463  # Update this with the PID of the process you want to monitor
 process = psutil.Process(pid)
 
 # CSV output file
-output_file = "results/process_metrics_ros2_shm_subscriber.csv"
+output_file = "results/process_metrics_DAVOSSIMCAMERA.csv"
 
 # Open the CSV file for writing
 with open(output_file, mode='w', newline='') as f:
